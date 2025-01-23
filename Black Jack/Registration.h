@@ -1,13 +1,3 @@
-#pragma once
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <winsock2.h>
-#include <cstring>
-
-using namespace std;
-
 class Registration {
     string username;
     string password;

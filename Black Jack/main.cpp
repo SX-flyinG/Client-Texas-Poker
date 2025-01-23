@@ -4,6 +4,10 @@
 #include <ws2tcpip.h>
 #include <string>
 #include <conio.h>
+#include <vector>
+#include <cstring>
+#include <cstdlib>
+#include <ctime>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -11,6 +15,7 @@ using namespace std;
 
 #include "Registration.h" 
 #include "Lobby.h"
+#include "Game.h"
 
 int main() {
     const string SERVER_IP = "127.0.0.1";
@@ -18,7 +23,7 @@ int main() {
     Registration registration;
     UserLobby userLobby;
 
-    // Èíèöèàëèçàöèÿ Winsock
+
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         cerr << "Failed to initialize Winsock" << endl;
@@ -51,15 +56,19 @@ int main() {
 
     registration.reg(clientSocket);
     while (true) {
-        
-    lobby.MainLobby(clientSocket);
+        if (userLobby.MainMenu(clientSocket) == 0) {
+            // Запуск игры
+            int numPlayers = 1; // Предположим, 1 игрок для простоты
+            PokerGame pokerGame(numPlayers);
+            pokerGame.StartGame(clientSocket);
 
-    // Start Poker Game
-    // Assuming a game with 1 players for simplicity
-    int numPlayers = 1;
-        while(true) {
-        PokerGame pokerGame(numPlayers);
-        pokerGame.StartGame(clientSocket);
+            // Предложить продолжить игру или выйти
+            char choice;
+            cout << "Do you want to play again? (y/n): ";
+            cin >> choice;
+            if (choice == 'n') {
+                break; // Выход из игры
+            }
         }
     }
 
