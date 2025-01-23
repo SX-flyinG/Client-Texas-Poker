@@ -15,7 +15,6 @@ using namespace std;
 
 #include "Registration.h" 
 #include "Lobby.h"
-#include "Game.h"
 
 int main() {
     const string SERVER_IP = "127.0.0.1";

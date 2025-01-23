@@ -1,12 +1,14 @@
+#include "Game.h"
+
 class UserLobby {
     char buffer[1024];
     char choice;
 
 public:
     int MainMenu(SOCKET clientSocket) {
+        int numPlayers = 1;
+        PokerGame pokerGame(numPlayers);
         while (true) {
-            int numPlayers = 1; 
-            PokerGame pokerGame(numPlayers);
             memset(buffer, 0, sizeof(buffer));
             int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
             if (bytesReceived > 0) {
