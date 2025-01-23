@@ -18,14 +18,14 @@ int main() {
     Registration registration;
     UserLobby userLobby;
 
-    // Инициализация Winsock
+    // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї Winsock
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         cerr << "Failed to initialize Winsock" << endl;
         return 1;
     }
 
-    // Создание сокета
+    // Г‘Г®Г§Г¤Г Г­ГЁГҐ Г±Г®ГЄГҐГІГ 
     SOCKET clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (clientSocket == INVALID_SOCKET) {
         cerr << "Error: Failed to create socket" << endl;
@@ -33,13 +33,13 @@ int main() {
         return 1;
     }
 
-    // Настройка адреса сервера
+    // ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г Г¤Г°ГҐГ±Г  Г±ГҐГ°ГўГҐГ°Г 
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(SERVER_PORT);
     inet_pton(AF_INET, SERVER_IP.c_str(), &serverAddr.sin_addr);
 
-    // Подключение к серверу
+    // ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЄ Г±ГҐГ°ГўГҐГ°Гі
     if (connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
         cerr << "Error: Failed to connect to the server" << endl;
         closesocket(clientSocket);
@@ -49,11 +49,21 @@ int main() {
 
     cout << "Connected to server " << SERVER_IP << ":" << SERVER_PORT << endl;
 
-    // Взаимодействие с сервером
     registration.reg(clientSocket);
-    userLobby.MainMenu(clientSocket);
+    while (true) {
+        
+    lobby.MainLobby(clientSocket);
 
-    // Завершение работы клиента
+    // Start Poker Game
+    // Assuming a game with 1 players for simplicity
+    int numPlayers = 1;
+        while(true) {
+        PokerGame pokerGame(numPlayers);
+        pokerGame.StartGame(clientSocket);
+        }
+    }
+
+    // Г‡Г ГўГҐГ°ГёГҐГ­ГЁГҐ Г°Г ГЎГ®ГІГ» ГЄГ«ГЁГҐГ­ГІГ 
     closesocket(clientSocket);
     WSACleanup();
     return 0;
