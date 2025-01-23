@@ -1,9 +1,18 @@
-class UserLobby {
+// Базовый абстрактный класс
+class IMenu {
+public:
+    virtual int MainMenu(SOCKET clientSocket) = 0;
+    virtual void Rules(SOCKET clientSocket) = 0;
+    virtual ~IMenu() = default; // Виртуальный деструктор для безопасности
+};
+
+// Класс UserLobby реализует интерфейс IMenu
+class UserLobby : public IMenu {
     char buffer[1024];
     char choice;
 
 public:
-    int MainMenu(SOCKET clientSocket) {
+    int MainMenu(SOCKET clientSocket) override {
         while (true) {
             memset(buffer, 0, sizeof(buffer)); 
             int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
@@ -39,7 +48,7 @@ public:
         return 0;
     }
 
-    void Rules(SOCKET clientSocket) {
+    void Rules(SOCKET clientSocket) override {
         memset(buffer, 0, sizeof(buffer)); 
         int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
         if (bytesReceived > 0) {
