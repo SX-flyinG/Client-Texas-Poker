@@ -5,6 +5,8 @@ class UserLobby {
 public:
     int MainMenu(SOCKET clientSocket) {
         while (true) {
+            int numPlayers = 1; 
+            PokerGame pokerGame(numPlayers);
             memset(buffer, 0, sizeof(buffer));
             int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
             if (bytesReceived > 0) {
@@ -37,6 +39,9 @@ public:
             }
             else if (choice == '2') {
                 Rules(clientSocket);
+            }
+            else if (choice == '1') {
+                pokerGame.StartGame(clientSocket);
             }
         }
         return 0;

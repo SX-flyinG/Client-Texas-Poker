@@ -101,7 +101,7 @@ public:
                 send(clientSocket, "Game Over", 9, 0);
                 return;
             default:
-                send(clientSocket, "Next Game Starting...", 23, 0);
+                send(clientSocket, "Next Game Starting...", 2, 0);
                 break;
             }
         }

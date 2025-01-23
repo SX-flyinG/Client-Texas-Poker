@@ -55,22 +55,8 @@ int main() {
     cout << "Connected to server " << SERVER_IP << ":" << SERVER_PORT << endl;
 
     registration.reg(clientSocket);
-    while (true) {
-        if (userLobby.MainMenu(clientSocket) == 0) {
-            // Запуск игры
-            int numPlayers = 1; // Предположим, 1 игрок для простоты
-            PokerGame pokerGame(numPlayers);
-            pokerGame.StartGame(clientSocket);
-
-            // Предложить продолжить игру или выйти
-            char choice;
-            cout << "Do you want to play again? (y/n): ";
-            cin >> choice;
-            if (choice == 'n') {
-                break; // Выход из игры
-            }
-        }
-    }
+    userLobby.MainMenu(clientSocket);
+            
 
     // Çàâåðøåíèå ðàáîòû êëèåíòà
     closesocket(clientSocket);
