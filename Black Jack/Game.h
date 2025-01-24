@@ -89,8 +89,29 @@ public:
 
 
 	void StartGame(SOCKET clientSocket) {
-		ShowAllHands(clientSocket);
-		PlayerBets(clientSocket);
-		DetermineWinner(clientSocket);
+		while (true) {
+			ShowAllHands(clientSocket);    // Показать руки игроков
+			PlayerBets(clientSocket);      // Сделать ставки
+			DetermineWinner(clientSocket); // Определить победителя
+
+			// Получить сообщение от сервера о продолжении
+			char buffer[1024] = { 0 };
+			int messageReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+			if (messageReceived <= 0) {
+				cerr << "Error: Failed to receive continue message." << endl;
+				break;
+			}
+			buffer[messageReceived] = '\0';
+			cout << buffer;
+
+			// Ответить серверу
+			string response;
+			cin >> response;
+			send(clientSocket, response.c_str(), response.size(), 0);
+
+			if (response != "yes") {
+				break; // Выход из цикла, если игрок выбрал "no"
+			}
+		}
 	}
 };
