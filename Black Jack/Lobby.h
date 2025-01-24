@@ -6,10 +6,8 @@ class UserLobby {
 
 public:
     int MainMenu(SOCKET clientSocket) {
-        int numPlayers = 1;
-        PokerGame pokerGame(numPlayers);
-        while (true) {
-            memset(buffer, 0, sizeof(buffer));
+            int numPlayers = 1;
+            PokerGame poker;
             int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
             if (bytesReceived > 0) {
                 buffer[bytesReceived] = '\0';
@@ -17,9 +15,9 @@ public:
             }
             else {
                 cerr << "Error: Failed to receive menu from server" << endl;
-                return 1;
+                return 0;
             }
-
+            memset(buffer, 0, sizeof(buffer));
             cout << "Enter your choice: ";
             cin >> choice;
             cin.ignore();
@@ -35,21 +33,20 @@ public:
                 }
                 else {
                     cerr << "Error: Failed to receive exit message from server" << endl;
-                    return 1;
+                    return 0;
                 }
-                break;
+                return 0;
             }
             else if (choice == '2') {
                 Rules(clientSocket);
             }
             else if (choice == '1') {
-                pokerGame.StartGame(clientSocket);
+                poker.StartGame(clientSocket);
             }
-        }
-        return 0;
     }
 
     void Rules(SOCKET clientSocket) {
+        system("cls");
         memset(buffer, 0, sizeof(buffer));
         int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
         if (bytesReceived > 0) {
@@ -61,11 +58,9 @@ public:
             return;
         }
 
-        cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
 
         send(clientSocket, &choice, sizeof(choice), 0);
-        MainMenu(clientSocket);
     }
 };

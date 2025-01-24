@@ -16,6 +16,7 @@ using namespace std;
 #include "Registration.h" 
 #include "Lobby.h"
 
+
 int main() {
     const string SERVER_IP = "127.0.0.1";
     const int SERVER_PORT = 55805;
@@ -54,7 +55,10 @@ int main() {
     cout << "Connected to server " << SERVER_IP << ":" << SERVER_PORT << endl;
 
     registration.reg(clientSocket);
-    userLobby.MainMenu(clientSocket);
+    while (true) {
+		system("cls");
+        userLobby.MainMenu(clientSocket);
+    }
             
 
     // Çàâåðøåíèå ðàáîòû êëèåíòà
